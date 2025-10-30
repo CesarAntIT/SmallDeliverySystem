@@ -2,5 +2,6 @@
 {
     public class BlankEntity
     {
+        bool IsUsed { get; set; }
     }
 }
