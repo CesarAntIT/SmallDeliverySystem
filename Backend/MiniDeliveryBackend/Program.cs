@@ -1,4 +1,7 @@
 
+using Microsoft.EntityFrameworkCore;
+using MiniDeliveryBackend.Context;
+
 namespace MiniDeliveryBackend
 {
     public class Program
@@ -6,6 +9,9 @@ namespace MiniDeliveryBackend
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+
+            builder.Services.AddDbContext<MiniDeliveryContext>(options => 
+                options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
             // Add services to the container.
 
