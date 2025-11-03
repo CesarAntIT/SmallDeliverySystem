@@ -178,8 +178,17 @@ namespace MiniDeliveryBackend.Business.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<string>("Code")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("DeletedByUserId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Description")
                         .HasMaxLength(1000)
@@ -205,9 +214,42 @@ namespace MiniDeliveryBackend.Business.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("DeletedByUserId");
+
                     b.HasIndex("Name");
 
                     b.ToTable("Products");
+                });
+
+            modelBuilder.Entity("MiniDeliveryBackend.Business.Entities.ProductAudit", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Action")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Notes")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("PerformedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("PerformedByUserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("ProductId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PerformedByUserId");
+
+                    b.ToTable("ProductAudits");
                 });
 
             modelBuilder.Entity("MiniDeliveryBackend.Business.Entities.User", b =>
@@ -319,6 +361,26 @@ namespace MiniDeliveryBackend.Business.Migrations
                     b.Navigation("Order");
 
                     b.Navigation("Product");
+                });
+
+            modelBuilder.Entity("MiniDeliveryBackend.Business.Entities.Product", b =>
+                {
+                    b.HasOne("MiniDeliveryBackend.Business.Entities.User", "DeletedByUser")
+                        .WithMany()
+                        .HasForeignKey("DeletedByUserId")
+                        .OnDelete(DeleteBehavior.NoAction);
+
+                    b.Navigation("DeletedByUser");
+                });
+
+            modelBuilder.Entity("MiniDeliveryBackend.Business.Entities.ProductAudit", b =>
+                {
+                    b.HasOne("MiniDeliveryBackend.Business.Entities.User", "PerformedByUser")
+                        .WithMany()
+                        .HasForeignKey("PerformedByUserId")
+                        .OnDelete(DeleteBehavior.NoAction);
+
+                    b.Navigation("PerformedByUser");
                 });
 
             modelBuilder.Entity("MiniDeliveryBackend.Business.Entities.DeliveryPerson", b =>
