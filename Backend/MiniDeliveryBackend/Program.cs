@@ -1,6 +1,8 @@
-
 using Microsoft.EntityFrameworkCore;
+using MiniDeliveryBackend.Business.Entities;
 using MiniDeliveryBackend.Context;
+using MiniDeliveryBackend.Interfaces;
+using MiniDeliveryBackend.Services;
 
 namespace MiniDeliveryBackend
 {
@@ -10,18 +12,30 @@ namespace MiniDeliveryBackend
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            builder.Services.AddDbContext<MiniDeliveryContext>(options => 
+            // Configurar base de datos
+            builder.Services.AddDbContext<MiniDeliveryContext>(options =>
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-            // Add services to the container.
-
             builder.Services.AddControllers();
-            // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
+            builder.Services.AddScoped<IProductService, ProductService>();
+
+            // Habilitar CORS (para permitir conexion desde el frontend)
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy("AllowAll", policy =>
+                {
+                    policy.AllowAnyOrigin()
+                          .AllowAnyHeader()
+                          .AllowAnyMethod();
+                });
+            });
+
+            // Configuracion de OpenAPI (Swagger)
             builder.Services.AddOpenApi();
 
             var app = builder.Build();
 
-            // Configure the HTTP request pipeline.
+            // Configuracion del pipeline HTTP
             if (app.Environment.IsDevelopment())
             {
                 app.MapOpenApi();
@@ -31,12 +45,29 @@ namespace MiniDeliveryBackend
                 });
             }
 
+            app.UseCors("AllowAll");
             app.UseHttpsRedirection();
-
             app.UseAuthorization();
 
-
             app.MapControllers();
+
+            // Crear producto de prueba si la base de datos esta vacia
+            using (var scope = app.Services.CreateScope())
+            {
+                var context = scope.ServiceProvider.GetRequiredService<MiniDeliveryContext>();
+                if (!context.Products.Any())
+                {
+                    context.Products.Add(new Product
+                    {
+                        Name = "Producto de Prueba",
+                        Description = "Articulo de ejemplo para pruebas locales",
+                        Price = 99.99m,
+                        Stock = 10,
+                        IsActive = true
+                    });
+                    context.SaveChanges();
+                }
+            }
 
             app.Run();
         }
