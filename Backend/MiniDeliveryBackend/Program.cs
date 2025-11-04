@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using MiniDeliveryBackend.Business.Entities;
 using MiniDeliveryBackend.Context;
+using MiniDeliveryBackend.Business.Services;
 using MiniDeliveryBackend.Interfaces;
 using MiniDeliveryBackend.Services;
 
@@ -12,17 +13,24 @@ namespace MiniDeliveryBackend
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            // Configurar base de datos
+            // se agregan los controladores
+            builder.Services.AddControllers();
+
+            // se agrega swagger para ver la api en el navegador
+            builder.Services.AddEndpointsApiExplorer();
+            builder.Services.AddSwaggerGen();
+
+            // se conecta la base de datos sql server
             builder.Services.AddDbContext<MiniDeliveryContext>(options =>
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-            builder.Services.AddControllers();
-            builder.Services.AddScoped<IProductService, ProductService>();
+            // se registra el servicio de productos
+            builder.Services.AddScoped<ProductService>();
 
-            // Habilitar CORS (para permitir conexion desde el frontend)
+            // se permite que el frontend se conecte sin problema
             builder.Services.AddCors(options =>
             {
-                options.AddPolicy("AllowAll", policy =>
+                options.AddPolicy("permitirTodo", policy =>
                 {
                     policy.AllowAnyOrigin()
                           .AllowAnyHeader()
@@ -38,11 +46,8 @@ namespace MiniDeliveryBackend
             // Configuracion del pipeline HTTP
             if (app.Environment.IsDevelopment())
             {
-                app.MapOpenApi();
-                app.UseSwaggerUi(options =>
-                {
-                    options.DocumentPath = "openapi/v1.json";
-                });
+                app.UseSwagger();
+                app.UseSwaggerUI();
             }
 
             app.UseCors("AllowAll");
@@ -73,3 +78,4 @@ namespace MiniDeliveryBackend
         }
     }
 }
+
