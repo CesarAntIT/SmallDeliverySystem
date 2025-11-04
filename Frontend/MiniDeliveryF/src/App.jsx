@@ -1,10 +1,14 @@
+
 import { useEffect, useState } from "react";
 import ProductForm from "./ProductForm";
+import './App.css'
+import RegistroForm from './Components/RegistroArticulos'
 
 function App() {
   const [productos, setProductos] = useState([]);
   const [productoSeleccionado, setProductoSeleccionado] = useState(null);
   const [error, setError] = useState("");
+  const [mostrarFormulario, setMostrarFormulario] = useState(false);
 
   // El puerto se cambiaria dependiendo del puerto que muestre el backend 
   const API_URL = "http://localhost:5277/api/product";
@@ -21,7 +25,7 @@ function App() {
       })
       .catch((err) => {
         console.error(err);
-        setError("❌ No se pudo conectar con el servidor");
+        setError("No se pudo conectar con el servidor");
         setProductos([]);
       });
   };
@@ -34,6 +38,29 @@ function App() {
     <div style={{ padding: "2rem", fontFamily: "Arial, sans-serif", color: "white", backgroundColor: "#222", minHeight: "100vh" }}>
       <h1>Gestión de Productos</h1>
       {error && <p style={{ color: "red" }}>{error}</p>}
+
+       <button
+        onClick={() => setMostrarFormulario(!mostrarFormulario)}
+        style={{
+          backgroundColor: "#007bff",
+          color: "white",
+          padding: "10px 20px",
+          border: "none",
+          borderRadius: "5px",
+          cursor: "pointer",
+          marginBottom: "20px",
+        }}
+      >
+        {mostrarFormulario ? "Cerrar formulario" : "Agregar nuevo artículo"}
+      </button>
+
+      {/* Mostrar el formulario si el botón está activo */}
+      {mostrarFormulario && (
+        <div style={{ marginBottom: "30px" }}>
+          <RegistroForm />
+        </div>
+      )}
+    
 
       {productos.length === 0 ? (
         <p>No hay productos disponibles.</p>
@@ -69,6 +96,7 @@ function App() {
       )}
     </div>
   );
+
 }
 
 export default App;

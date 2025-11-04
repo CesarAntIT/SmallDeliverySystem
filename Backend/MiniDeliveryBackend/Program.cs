@@ -1,8 +1,10 @@
 using Microsoft.EntityFrameworkCore;
+
 using MiniDeliveryBackend.Business.Entities;
+using MiniDeliveryBackend.Business.Interfaces;
 using MiniDeliveryBackend.Context;
-using MiniDeliveryBackend.Business.Services;
 using MiniDeliveryBackend.Interfaces;
+
 using MiniDeliveryBackend.Services;
 
 namespace MiniDeliveryBackend
@@ -41,7 +43,20 @@ namespace MiniDeliveryBackend
             // Configuracion de OpenAPI (Swagger)
             builder.Services.AddOpenApi();
 
+            //configurar interfaz con servivio
+            builder.Services.AddScoped<Iinventory, InventoryService>();
+
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy("PermitirTodo",
+                    policy => policy.AllowAnyOrigin()
+                                    .AllowAnyHeader()
+                                    .AllowAnyMethod());
+            });
+
+
             var app = builder.Build();
+            app.UseCors("PermitirTodo");
 
             // Configuracion del pipeline HTTP
             if (app.Environment.IsDevelopment())
