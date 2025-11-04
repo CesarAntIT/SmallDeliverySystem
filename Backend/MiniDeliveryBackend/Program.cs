@@ -1,6 +1,8 @@
 
 using Microsoft.EntityFrameworkCore;
+using MiniDeliveryBackend.Business.Interfaces;
 using MiniDeliveryBackend.Context;
+using MiniDeliveryBackend.Services;
 
 namespace MiniDeliveryBackend
 {
@@ -19,7 +21,20 @@ namespace MiniDeliveryBackend
             // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
             builder.Services.AddOpenApi();
 
+            //configurar interfaz con servivio
+            builder.Services.AddScoped<Iinventory, InventoryService>();
+
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy("PermitirTodo",
+                    policy => policy.AllowAnyOrigin()
+                                    .AllowAnyHeader()
+                                    .AllowAnyMethod());
+            });
+
+
             var app = builder.Build();
+            app.UseCors("PermitirTodo");
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
