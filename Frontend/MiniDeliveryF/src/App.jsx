@@ -1,102 +1,57 @@
-
-import { useEffect, useState } from "react";
-import ProductForm from "./ProductForm";
-import './App.css'
-import RegistroForm from './Components/RegistroArticulos'
+import React, { useState } from 'react';
+import ProductManagement from './components/products/ProductManagement';
+import './App.css';
 
 function App() {
-  const [productos, setProductos] = useState([]);
-  const [productoSeleccionado, setProductoSeleccionado] = useState(null);
-  const [error, setError] = useState("");
-  const [mostrarFormulario, setMostrarFormulario] = useState(false);
+  const [userRole, setUserRole] = useState('admin'); // 'admin' o 'cashier'
 
-  // El puerto se cambiaria dependiendo del puerto que muestre el backend 
-  const API_URL = "http://localhost:5277/api/product";
-
-  const cargarProductos = () => {
-    fetch(API_URL)
-      .then((res) => {
-        if (!res.ok) throw new Error("Error al obtener productos");
-        return res.json();
-      })
-      .then((data) => {
-        setProductos(data);
-        setError("");
-      })
-      .catch((err) => {
-        console.error(err);
-        setError("No se pudo conectar con el servidor");
-        setProductos([]);
-      });
+  const toggleRole = () => {
+    setUserRole(userRole === 'admin' ? 'cashier' : 'admin');
   };
 
-  useEffect(() => {
-    cargarProductos();
-  }, []);
-
   return (
-    <div style={{ padding: "2rem", fontFamily: "Arial, sans-serif", color: "white", backgroundColor: "#222", minHeight: "100vh" }}>
-      <h1>Gestión de Productos</h1>
-      {error && <p style={{ color: "red" }}>{error}</p>}
-
-       <button
-        onClick={() => setMostrarFormulario(!mostrarFormulario)}
-        style={{
-          backgroundColor: "#007bff",
-          color: "white",
-          padding: "10px 20px",
-          border: "none",
-          borderRadius: "5px",
-          cursor: "pointer",
-          marginBottom: "20px",
-        }}
-      >
-        {mostrarFormulario ? "Cerrar formulario" : "Agregar nuevo artículo"}
-      </button>
-
-      {/* Mostrar el formulario si el botón está activo */}
-      {mostrarFormulario && (
-        <div style={{ marginBottom: "30px" }}>
-          <RegistroForm />
+    <div className="min-h-screen bg-gray-50">
+      {/* Header */}
+      <header className="bg-white shadow-sm border-b border-gray-200">
+        <div className="max-w-7xl mx-auto px-6 py-4">
+          <div className="flex justify-between items-center">
+            <div className="flex items-center">
+              <h1 className="text-2xl font-bold text-gray-900">MiniDelivery System</h1>
+              <span className="ml-4 px-3 py-1 text-xs font-medium bg-blue-100 text-blue-800 rounded-full">
+                v1.0
+              </span>
+            </div>
+            
+            <div className="flex items-center space-x-4">
+              <div className="text-sm text-gray-600">
+                Rol actual: <strong>{userRole === 'admin' ? 'Administrador' : 'Cajero'}</strong>
+              </div>
+              <button
+                onClick={toggleRole}
+                className="px-4 py-2 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-lg transition-colors"
+              >
+                Cambiar a {userRole === 'admin' ? 'Cajero' : 'Admin'}
+              </button>
+            </div>
+          </div>
         </div>
-      )}
-    
+      </header>
 
-      {productos.length === 0 ? (
-        <p>No hay productos disponibles.</p>
-      ) : (
-        <table style={{ width: "100%", marginTop: "20px", borderCollapse: "collapse" }}>
-          <thead>
-            <tr style={{ backgroundColor: "#444" }}>
-              <th style={{ padding: "10px", border: "1px solid #666" }}>Nombre</th>
-              <th style={{ padding: "10px", border: "1px solid #666" }}>Descripción</th>
-              <th style={{ padding: "10px", border: "1px solid #666" }}>Precio</th>
-              <th style={{ padding: "10px", border: "1px solid #666" }}>Stock</th>
-              <th style={{ padding: "10px", border: "1px solid #666" }}>Acciones</th>
-            </tr>
-          </thead>
-          <tbody>
-            {productos.map((p) => (
-              <tr key={p.id} style={{ backgroundColor: "#333" }}>
-                <td style={{ padding: "10px", border: "1px solid #666" }}>{p.name}</td>
-                <td style={{ padding: "10px", border: "1px solid #666" }}>{p.description}</td>
-                <td style={{ padding: "10px", border: "1px solid #666" }}>{p.price}</td>
-                <td style={{ padding: "10px", border: "1px solid #666" }}>{p.stock}</td>
-                <td style={{ padding: "10px", border: "1px solid #666" }}>
-                  <button onClick={() => setProductoSeleccionado(p)}>Editar</button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      )}
+      {/* Main Content */}
+      <main>
+        <ProductManagement userRole={userRole} />
+      </main>
 
-      {productoSeleccionado && (
-        <ProductForm product={productoSeleccionado} onUpdate={cargarProductos} />
-      )}
+      {/* Footer */}
+      <footer className="bg-white border-t border-gray-200 mt-12">
+        <div className="max-w-7xl mx-auto px-6 py-8">
+          <div className="text-center text-gray-600">
+            <p>&copy; 2024 MiniDelivery System. Sistema de gestión de inventario y ventas.</p>
+          </div>
+        </div>
+      </footer>
     </div>
   );
-
 }
 
 export default App;
