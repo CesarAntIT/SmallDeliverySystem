@@ -1,7 +1,9 @@
-
 using Microsoft.EntityFrameworkCore;
+using MiniDeliveryBackend.Business.Entities;
 using MiniDeliveryBackend.Context;
 using MiniDeliveryBackend.Business.Services;
+using MiniDeliveryBackend.Interfaces;
+using MiniDeliveryBackend.Services;
 
 namespace MiniDeliveryBackend
 {
@@ -36,23 +38,41 @@ namespace MiniDeliveryBackend
                 });
             });
 
+            // Configuracion de OpenAPI (Swagger)
+            builder.Services.AddOpenApi();
+
             var app = builder.Build();
 
-            // esto solo se ejecuta en modo desarrollo
+            // Configuracion del pipeline HTTP
             if (app.Environment.IsDevelopment())
             {
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
 
-            // activa cors para permitir conexión del frontend
-            app.UseCors("permitirTodo");
-
-            // redirige a https por seguridad
+            app.UseCors("AllowAll");
             app.UseHttpsRedirection();
+            app.UseAuthorization();
 
-            // habilita las rutas de los controladores
             app.MapControllers();
+
+            // Crear producto de prueba si la base de datos esta vacia
+            using (var scope = app.Services.CreateScope())
+            {
+                var context = scope.ServiceProvider.GetRequiredService<MiniDeliveryContext>();
+                if (!context.Products.Any())
+                {
+                    context.Products.Add(new Product
+                    {
+                        Name = "Producto de Prueba",
+                        Description = "Articulo de ejemplo para pruebas locales",
+                        Price = 99.99m,
+                        Stock = 10,
+                        IsActive = true
+                    });
+                    context.SaveChanges();
+                }
+            }
 
             app.Run();
         }

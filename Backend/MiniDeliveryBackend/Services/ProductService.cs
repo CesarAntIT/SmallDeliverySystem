@@ -1,18 +1,39 @@
-﻿using MiniDeliveryBackend.Business.Entities;
+﻿using Microsoft.EntityFrameworkCore;
+using MiniDeliveryBackend.Business.Entities;
 using MiniDeliveryBackend.Context;
-using Microsoft.EntityFrameworkCore;
+using MiniDeliveryBackend.Entities;
+using MiniDeliveryBackend.Interfaces;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
-namespace MiniDeliveryBackend.Business.Services
+namespace MiniDeliveryBackend.Services
 {
-    public class ProductService
+    public class ProductService : IProductService
     {
-        private readonly MiniDeliveryContext _db;
-        public ProductService(MiniDeliveryContext db) => _db = db;
+        private readonly MiniDeliveryContext _context;
 
-        public Task<List<Product>> GetAllAsync(CancellationToken ct = default)
-            => _db.Products.AsNoTracking().OrderBy(p => p.Name).ToListAsync(ct);
+        public ProductService(MiniDeliveryContext context)
+        {
+            _context = context;
+        }
 
-        public async Task<bool> DeactivateAsync(Guid id, Guid? userId, CancellationToken ct = default)
+        public async Task<Product> GetByIdAsync(Guid id)
+        {
+            return await _context.Products.FindAsync(id);
+        }
+
+        public async Task<List<Product>> GetAllAsync()
+        {
+            return await _context.Products.ToListAsync();
+        }
+
+        public async Task UpdateAsync(Product product)
+        {
+            _context.Products.Update(product);
+            await _context.SaveChangesAsync();
+        }
+
+              public async Task<bool> DeactivateAsync(Guid id, Guid? userId, CancellationToken ct = default)
         {
             var product = await _db.Products
                                    .IgnoreQueryFilters()
