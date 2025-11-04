@@ -1,8 +1,8 @@
 using Microsoft.EntityFrameworkCore;
 
 using MiniDeliveryBackend.Business.Entities;
+using MiniDeliveryBackend.Business.Interfaces;
 using MiniDeliveryBackend.Context;
-using MiniDeliveryBackend.Business.Services;
 using MiniDeliveryBackend.Interfaces;
 
 using MiniDeliveryBackend.Services;

@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using MiniDeliveryBackend.Business.Services;
+
 using MiniDeliveryBackend.Business.Entities;
+using MiniDeliveryBackend.Services;
 using System.Security.Claims;
 
 
@@ -16,7 +17,7 @@ namespace MiniDeliveryBackend.Business.Controllers
 
         [HttpGet]
         public async Task<ActionResult<List<Product>>> GetAll(CancellationToken ct)
-            => await _svc.GetAllAsync(ct);
+            => await _svc.GetAllAsync();
 
 
         [HttpDelete("{id:guid}")]

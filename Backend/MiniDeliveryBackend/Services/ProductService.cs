@@ -35,7 +35,7 @@ namespace MiniDeliveryBackend.Services
 
               public async Task<bool> DeactivateAsync(Guid id, Guid? userId, CancellationToken ct = default)
         {
-            var product = await _db.Products
+            var product = await _context.Products
                                    .IgnoreQueryFilters()
                                    .FirstOrDefaultAsync(p => p.Id == id, ct);
 
@@ -46,7 +46,7 @@ namespace MiniDeliveryBackend.Services
             product.DeletedAt = DateTime.UtcNow;
             product.DeletedByUserId = userId;
 
-            _db.ProductAudits.Add(new ProductAudit
+            _context.ProductAudits.Add(new ProductAudit
             {
                 ProductId = product.Id,
                 Action = "DESACTIVATE", 
@@ -54,7 +54,7 @@ namespace MiniDeliveryBackend.Services
                 Notes = "Eliminado (isActive=false)"
             });
 
-            await _db.SaveChangesAsync(ct);
+            await _context.SaveChangesAsync(ct);
             return true;
         }
     }
