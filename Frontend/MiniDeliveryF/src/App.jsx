@@ -57,7 +57,9 @@ function App() {
 
   return (
     <div style={{ padding: "2rem", fontFamily: "Arial, sans-serif", color: "white", backgroundColor: "#222", minHeight: "100vh" }}>
-      <h1>Gestión de Productos</h1>
+      <h1 style={{fontSize:"xx-large", fontWeight:"bolder"}}>Gestión de Productos</h1><br />
+      <hr />
+      <br />
       {error && <p style={{ color: "red" }}>{error}</p>}
 
        <button
@@ -118,7 +120,7 @@ function App() {
               <tr key={p.id} style={{ backgroundColor: "#333" }}>
                 <td style={{ padding: "10px", border: "1px solid #666" }}>{p.name}</td>
                 <td style={{ padding: "10px", border: "1px solid #666" }}>{p.description}</td>
-                <td style={{ padding: "10px", border: "1px solid #666" }}>{p.price}</td>
+                <td style={{ padding: "10px", border: "1px solid #666" }}>RD$ {p.price}</td>
                 <td style={{ padding: "10px", border: "1px solid #666" }}>{p.stock}</td>
                 <td style={{ padding: "10px", border: "1px solid #666" }}>
                   <div className="flex gap-4">
