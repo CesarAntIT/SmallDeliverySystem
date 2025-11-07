@@ -129,7 +129,7 @@ useEffect(() => {
                   name="Name"
                   value={formData.Name}
                   onChange={handleInputChange}
-                  className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition ${
+                  className={`w-full px-4 py-2 text-black border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition ${
                     errors.nombre ? 'border-red-500' : 'border-gray-300'
                   }`}
                   placeholder="Ej: Hamburguesa Especial"
@@ -151,7 +151,7 @@ useEffect(() => {
                   name="Categoria"
                   value={formData.Categoria}
                   onChange={handleInputChange}
-                  className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition ${
+                  className={`w-full px-4 py-2 border text-black rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition ${
                     errors.categoria ? 'border-red-500' : 'border-gray-300'
                   }`}
                 >
@@ -180,7 +180,7 @@ useEffect(() => {
                     value={formData.Price}
                     onChange={handleInputChange}
                     min="0"
-                    className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition ${
+                    className={`w-full px-4 py-2 border rounded-lg text-black focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition ${
                       errors.precio ? 'border-red-500' : 'border-gray-300'
                     }`}
                     placeholder="0"
@@ -200,7 +200,7 @@ useEffect(() => {
                     value={formData.Stock}
                     onChange={handleInputChange}
                     min="0"
-                    className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition ${
+                    className={`w-full px-4 py-2 border rounded-lg text-black focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition ${
                       errors.stock ? 'border-red-500' : 'border-gray-300'
                     }`}
                     placeholder="0"
@@ -220,7 +220,7 @@ useEffect(() => {
                     value={formData.Fecha}
                     onChange={handleInputChange}
                     min="0"
-                    className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition ${
+                    className={`w-full px-4 py-2 border rounded-lg text-black focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition ${
                       errors.stock ? 'border-red-500' : 'border-gray-300'
                     }`}
                     placeholder="0"
@@ -242,7 +242,7 @@ useEffect(() => {
                   value={formData.Description}
                   onChange={handleInputChange}
                   rows="3"
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition resize-none"
+                  className="w-full px-4 py-2 border border-gray-300 text-black rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition resize-none"
                   placeholder="Descripción del artículo..."
                 />
               </div>
