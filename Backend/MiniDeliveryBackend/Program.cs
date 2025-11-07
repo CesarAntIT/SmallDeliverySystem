@@ -27,7 +27,7 @@ namespace MiniDeliveryBackend
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
             // se registra el servicio de productos
-            builder.Services.AddScoped<ProductService>();
+            builder.Services.AddScoped<IProductService,ProductService>();
 
             // se permite que el frontend se conecte sin problema
             builder.Services.AddCors(options =>
