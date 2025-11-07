@@ -1,6 +1,6 @@
 // src/pages/UpdateProductPage.jsx
 import React from "react";
-import ProductUpdateForm from "../components/ProductUpdateForm";
+import ProductUpdateForm from "../Components/ProductUpdateForm";
 
 export default function UpdateProductPage() {
   

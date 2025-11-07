@@ -14,8 +14,8 @@ namespace MiniDeliveryBackend
             builder.Services.AddDbContext<MiniDeliveryContext>(options => 
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-            // Add services to the container.
-            builder.Services.AddScoped<IProductService, ProductService>();
+            // se registra el servicio de productos
+            builder.Services.AddScoped<IProductService,ProductService>();
 
             // Add CORS
             builder.Services.AddCors(options =>
