@@ -1,20 +1,24 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 
+// https://vite.dev/config/
 export default defineConfig({
   plugins: [
     react({
-      babel: { plugins: [['babel-plugin-react-compiler']] }
+      include: "**/*.{jsx,tsx,js,ts}",
     }),
   ],
-  server: {
-    proxy: {
-      '/api': {
-        target: 'https://localhost:7044',
-        changeOrigin: true,
-        secure: false
-      }
-    }
-  }
+  esbuild: {
+    include: /\.(jsx?|tsx?)$/,
+    exclude: [],
+    loader: 'jsx',
+  },
+  optimizeDeps: {
+    esbuildOptions: {
+      loader: {
+        '.js': 'jsx',
+        '.jsx': 'jsx',
+      },
+    },
+  },
 })
-

@@ -19,21 +19,8 @@ function App() {
   // El puerto se cambiaria dependiendo del puerto que muestre el backend 
   const API_URL = "http://localhost:5277/api/product";
 
-  const cargarProductos = () => {
-    fetch(API_URL)
-      .then((res) => {
-        if (!res.ok) throw new Error("Error al obtener productos");
-        return res.json();
-      })
-      .then((data) => {
-        setProductos(data);
-        setError("");
-      })
-      .catch((err) => {
-        console.error(err);
-        setError("No se pudo conectar con el servidor");
-        setProductos([]);
-      });
+  const toggleRole = () => {
+    setUserRole(userRole === 'admin' ? 'cashier' : 'admin');
   };
 
   const confirmDelete = async () => {
@@ -168,7 +155,6 @@ function App() {
             )}
     </div>
   );
-
 }
 
 export default App;
